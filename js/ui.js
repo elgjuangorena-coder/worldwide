@@ -114,6 +114,34 @@ export function popupContent(lm, { place, visited, mapsUrl, onToggleVisited }) {
   ]);
 }
 
+/** Shows how much space the downloaded boundary files use, with a button to delete them. */
+export function storagePanel({ load, onClear }) {
+  const text = el('p', { class: 'storage-text', text: 'Calculando…' });
+  const button = el('button', { class: 'btn', type: 'button', text: 'Borrar mapas descargados', hidden: true });
+  const box = el('div', { class: 'storage' }, [text, button]);
+
+  const refresh = async () => {
+    const { countries, megabytes } = await load();
+    if (!countries.length) {
+      text.textContent = 'No hay mapas descargados. Se guardan solos cuando entras a un país para que la próxima vez cargue rápido.';
+      button.hidden = true;
+      return;
+    }
+    text.textContent = `${countries.join(', ')} · ${megabytes.toFixed(1)} MB. Se vuelven a descargar solos si los borras.`;
+    button.hidden = false;
+  };
+
+  button.addEventListener('click', async () => {
+    if (!window.confirm('¿Borrar los mapas descargados? Tus landmarks y visitados no se borran.')) return;
+    button.disabled = true;
+    await onClear();
+    button.disabled = false;
+    refresh();
+  });
+  refresh().catch(() => { text.textContent = 'Este navegador no permite guardar mapas.'; });
+  return box;
+}
+
 /* ---------- Breadcrumb ---------- */
 
 export function renderBreadcrumb(items) {

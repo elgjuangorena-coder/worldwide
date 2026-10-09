@@ -24,10 +24,6 @@ export function loadBoundaries(iso, level, onProgress) {
   return memory.get(key);
 }
 
-export function peekBoundaries(iso, level) {
-  return memory.get(`${iso}-${level}`) ?? null;
-}
-
 async function fetchBoundaries(iso, level, onProgress) {
   const meta = await fetchMeta(iso, level);
   if (!meta) return null;
@@ -76,23 +72,46 @@ async function openCache() {
   }
 }
 
+/** onProgress only fires for real network downloads, never for files already saved. */
 async function cachedJson(url, onProgress) {
   const cache = await openCache();
   const hit = cache && (await cache.match(url));
-  if (hit) {
-    onProgress?.(1);
-    return hit.json();
-  }
+  if (hit) return hit.json();
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status} en ${url}`);
   const text = await readText(res, onProgress);
   const data = JSON.parse(text);
-  cache?.put(url, new Response(text, { headers: { 'Content-Type': 'application/json' } })).catch(() => {});
+  if (cache) {
+    const blob = new Blob([text], { type: 'application/json' });
+    cache.put(url, new Response(blob, { headers: { 'Content-Type': 'application/json', 'X-Bytes': String(blob.size) } }))
+      .catch(() => {});
+  }
   return data;
+}
+
+/** Boundary files saved in this browser: [{ iso, level, bytes }]. */
+export async function savedBoundaries() {
+  const cache = await openCache();
+  if (!cache) return [];
+  const saved = [];
+  for (const req of await cache.keys()) {
+    const m = req.url.match(/geoBoundaries-([A-Z]{3})-(ADM\d)/);
+    if (!m) continue;
+    const res = await cache.match(req);
+    const bytes = Number(res?.headers.get('X-Bytes')) || (await res?.blob())?.size || 0;
+    saved.push({ iso: m[1], level: m[2], bytes });
+  }
+  return saved;
+}
+
+export async function clearSavedBoundaries() {
+  memory.clear();
+  if ('caches' in window) await caches.delete(CACHE_NAME);
 }
 
 async function readText(res, onProgress) {
   const total = Number(res.headers.get('Content-Length')) || 0;
+  onProgress?.(total ? 0 : null);
   if (!res.body || !onProgress) return res.text();
   const reader = res.body.getReader();
   const decoder = new TextDecoder();

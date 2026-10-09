@@ -1,6 +1,8 @@
 import * as M from './map.js';
 import * as UI from './ui.js';
-import { childrenOf, indexFeatures, loadBoundaries, parentOf, peekBoundaries } from './boundaries.js';
+import {
+  childrenOf, clearSavedBoundaries, indexFeatures, loadBoundaries, parentOf, savedBoundaries,
+} from './boundaries.js';
 import {
   allLandmarks, assignCountries, assignLevel, countBy, googleMapsUrl, isVisited,
   landmarkById, loadLandmarks, toggleVisited,
@@ -89,9 +91,12 @@ function go(...parts) {
 
 async function load(iso, level, text) {
   const key = `${iso}-${level}`;
-  const loader = peekBoundaries(iso, level) ? null : UI.showLoading(text);
+  let loader = null;
   try {
-    const b = await loadBoundaries(iso, level, (p) => loader?.progress(p));
+    const b = await loadBoundaries(iso, level, (p) => {
+      loader ??= UI.showLoading(text);
+      loader.progress(p);
+    });
     if (b) await applyNames(iso, level, b);
     if (b) loaded.set(key, b);
     return b;
@@ -211,8 +216,23 @@ function showWorld(args = {}, { move = true } = {}) {
     UI.hint('Gira el globo y toca un país, o búscalo arriba. Los países en amarillo tienen landmarks guardados.'),
     items.length ? UI.sectionTitle('Tus países') : null,
     items.length ? UI.regionList(items, (iso) => go(iso)) : null,
+    UI.sectionTitle('Mapas guardados en este navegador'),
+    UI.storagePanel({ load: storageSummary, onClear: clearStorage }),
   );
   UI.renderBreadcrumb([{ label: 'Mundo' }]);
+}
+
+async function storageSummary() {
+  const saved = await savedBoundaries();
+  const bytes = saved.reduce((sum, s) => sum + s.bytes, 0);
+  const names = [...new Set(saved.map((s) => countryByIso.get(s.iso)?.name ?? s.iso))].sort();
+  return { countries: names, megabytes: bytes / 1024 / 1024 };
+}
+
+async function clearStorage() {
+  await clearSavedBoundaries();
+  loaded.clear();
+  UI.toast('Listo, se borraron los mapas descargados. Tus landmarks y visitados siguen igual.');
 }
 
 function showCountryNoData(args, { move = true } = {}) {
