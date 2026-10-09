@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""Lint de la página: cada js/*.js parsea con `node --check` y existen los ficheros
+locales que cita index.html. Sin red y sin dependencias: Python 3 y Node."""
+import subprocess
+import sys
+from html.parser import HTMLParser
+from pathlib import Path
+from urllib.parse import urlsplit
+
+RAIZ = Path(__file__).resolve().parents[2]
+
+
+class RecursosLocales(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.rutas = []
+
+    def handle_starttag(self, etiqueta, atributos):
+        for nombre, valor in atributos:
+            if nombre not in ("src", "href") or not valor:
+                continue
+            partes = urlsplit(valor)
+            if not partes.scheme and not partes.netloc and partes.path:
+                self.rutas.append(partes.path)
+
+
+def main():
+    fallos = []
+
+    scripts = sorted((RAIZ / "js").glob("*.js"))
+    if not scripts:
+        fallos.append("js/: no hay ningún .js que revisar")
+    for script in scripts:
+        relativa = script.relative_to(RAIZ).as_posix()
+        resultado = subprocess.run(
+            ["node", "--check", relativa], cwd=RAIZ, capture_output=True, text=True
+        )
+        if resultado.returncode != 0:
+            fallos.append(f"{relativa}: no parsea como JavaScript\n{resultado.stderr.strip()}")
+
+    indice = RAIZ / "index.html"
+    if not indice.is_file():
+        fallos.append("index.html: no existe")
+    else:
+        lector = RecursosLocales()
+        lector.feed(indice.read_text(encoding="utf-8"))
+        if not lector.rutas:
+            fallos.append("index.html: no cita ningún fichero local")
+        for ruta in lector.rutas:
+            if not (RAIZ / ruta).is_file():
+                fallos.append(f"index.html cita {ruta}, que no existe")
+
+    for fallo in fallos:
+        print(f"lint: ROJO {fallo}")
+    if fallos:
+        return 1
+    print(f"lint: OK {len(scripts)} ficheros js/ parsean y index.html cita "
+          f"{len(lector.rutas)} ficheros locales que existen")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

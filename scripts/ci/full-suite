@@ -1,0 +1,7 @@
+#!/bin/sh
+# Suite completa: lint, seguridad y tests. set -e corta en el primer rojo y lo propaga.
+set -eu
+cd "$(dirname "$0")/../.."
+scripts/ci/lint
+scripts/ci/security
+python3 -B -m unittest -v tests/test_comprobacion.py
