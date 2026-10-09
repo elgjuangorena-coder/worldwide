@@ -5,6 +5,7 @@ import {
   allLandmarks, assignCountries, assignLevel, countBy, googleMapsUrl, isVisited,
   landmarkById, loadLandmarks, toggleVisited,
 } from './landmarks.js';
+import { applyAdmin1Names } from './names.js';
 import { colorFor, labelPoint, mainBbox, normalize } from './utils.js';
 
 const EMPTY = { type: 'FeatureCollection', features: [] };
@@ -91,6 +92,7 @@ async function load(iso, level, text) {
   const loader = peekBoundaries(iso, level) ? null : UI.showLoading(text);
   try {
     const b = await loadBoundaries(iso, level, (p) => loader?.progress(p));
+    if (b && level === 'ADM1') await applyAdmin1Names(iso, b);
     if (b) loaded.set(key, b);
     return b;
   } finally {
@@ -220,7 +222,7 @@ function showCountryNoData(args, { move = true } = {}) {
   UI.setStats([{ value: lms.length, label: 'landmarks' }]);
   UI.setBody(
     UI.hint('No hay estados ni municipios disponibles para este país.'),
-    lms.length ? landmarkList(lms) : null,
+    ...landmarkList(lms),
   );
   UI.renderBreadcrumb([{ label: 'Mundo', onClick: () => go() }, { label: country.name }]);
   openPending(lms);
@@ -285,7 +287,7 @@ function showState(args, { move = true } = {}) {
     UI.setStats([{ value: lms.length, label: 'landmarks' }]);
     UI.setBody(
       UI.hint('No hay municipios disponibles para este estado; aquí están todos sus landmarks.'),
-      lms.length ? landmarkList(lms) : null,
+      ...landmarkList(lms),
     );
   }
   UI.renderBreadcrumb([
@@ -320,7 +322,7 @@ function showMuni(args, { move = true } = {}) {
   ]);
   UI.setBody(
     lms.length ? null : UI.hint('Aún no tienes landmarks en este municipio.'),
-    lms.length ? landmarkList(lms) : null,
+    ...landmarkList(lms),
   );
   UI.renderBreadcrumb([
     { label: 'Mundo', onClick: () => go() },
@@ -338,14 +340,33 @@ function baseCountryLayers(country, lms, regions, labels, mode) {
   M.setData({ countries: countriesFC, regions, labels, focus: EMPTY, landmarks: landmarksFC(lms) });
 }
 
+/** Landmark cards, grouped under a heading per neighborhood when there is more than one. */
 function landmarkList(lms) {
-  const sorted = [...lms].sort((a, b) => a.name.localeCompare(b.name));
-  return UI.landmarkCards(sorted, {
+  const options = {
     onShow: (id) => showLandmark(landmarkById(id)),
     onToggleVisited: (id) => { toggleVisited(id); refreshView(); },
     isVisited,
     mapsUrl: googleMapsUrl,
-  });
+  };
+  const groups = new Map();
+  for (const lm of lms) {
+    const hood = lm.neighborhood || 'Otros';
+    if (!groups.has(hood)) groups.set(hood, []);
+    groups.get(hood).push(lm);
+  }
+  const byName = (a, b) => a.name.localeCompare(b.name);
+  if (groups.size <= 1) return [UI.landmarkCards([...lms].sort(byName), options)];
+
+  const nodes = [];
+  let start = 0;
+  const names = [...groups.keys()].sort((a, b) => (a === 'Otros') - (b === 'Otros') || a.localeCompare(b));
+  for (const hood of names) {
+    const list = groups.get(hood).sort(byName);
+    nodes.push(UI.sectionTitle(`${hood} · ${list.length}`));
+    nodes.push(UI.landmarkCards(list, { ...options, start }));
+    start += list.length;
+  }
+  return nodes;
 }
 
 /* ---------- Landmarks ---------- */
@@ -408,7 +429,8 @@ function placeLabel(lm) {
   const adm2 = loaded.get(`${lm.country}-ADM2`)?.byId.get(lm.adm2)?.properties.name;
   const adm1 = loaded.get(`${lm.country}-ADM1`)?.byId.get(lm.adm1)?.properties.name;
   const country = countryByIso.get(lm.country)?.name;
-  return [adm2, adm1, country].filter(Boolean).join(', ');
+  const place = [adm2, adm1, country].filter(Boolean).join(', ');
+  return [lm.neighborhood, place].filter(Boolean).join(' · ');
 }
 
 /* ---------- Clicks en el mapa ---------- */
@@ -452,7 +474,10 @@ function search(q) {
   };
 
   for (const lm of allLandmarks()) {
-    add({ type: 'landmark', typeLabel: 'Landmark', name: lm.name, sub: placeLabel(lm) || lm.category, id: lm.id }, lm.name, lm.category ?? '');
+    add(
+      { type: 'landmark', typeLabel: 'Landmark', name: lm.name, sub: placeLabel(lm) || lm.category, id: lm.id },
+      lm.name, lm.category ?? '', lm.neighborhood ?? '',
+    );
   }
   for (const c of countryByIso.values()) {
     add({ type: 'country', typeLabel: 'País', name: c.name, sub: c.nameEn !== c.name ? c.nameEn : '', iso: c.iso }, c.name, c.nameEn, c.iso);
@@ -460,7 +485,10 @@ function search(q) {
   if (view.iso) {
     const countryName = countryByIso.get(view.iso)?.name;
     for (const f of view.adm1?.features ?? []) {
-      add({ type: 'state', typeLabel: 'Estado', name: f.properties.name, sub: countryName, iso: view.iso, uid: f.properties.uid }, f.properties.name);
+      add(
+        { type: 'state', typeLabel: 'Estado', name: f.properties.name, sub: countryName, iso: view.iso, uid: f.properties.uid },
+        f.properties.name, f.properties.altName ?? '',
+      );
     }
     for (const f of view.adm2?.features ?? []) {
       add({ type: 'muni', typeLabel: 'Municipio', name: f.properties.name, sub: countryName, iso: view.iso, uid: f.properties.uid, feature: f }, f.properties.name);

@@ -362,6 +362,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 .card-name { margin: 0; font-size: 17px; font-weight: 800; }
 
+.card-hood { margin: 2px 0 0; font-size: 13px; font-weight: 600; color: var(--muted); }
+
 .chip {
   display: inline-block;
   margin-top: 4px;

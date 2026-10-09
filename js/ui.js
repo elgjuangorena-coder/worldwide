@@ -63,14 +63,15 @@ export function regionList(items, onSelect) {
   ]))));
 }
 
-export function landmarkCards(list, { onShow, onToggleVisited, isVisited, mapsUrl }) {
+export function landmarkCards(list, { onShow, onToggleVisited, isVisited, mapsUrl, start = 0 }) {
   return el('ul', { class: 'list' }, list.map((lm, i) => {
     const visited = isVisited(lm.id);
     return el('li', {}, el('article', { class: `card${visited ? ' visited' : ''}` }, [
       el('div', { class: 'card-top' }, [
-        el('span', { class: 'card-num', text: String(i + 1) }),
+        el('span', { class: 'card-num', text: String(start + i + 1) }),
         el('div', {}, [
           el('h3', { class: 'card-name', text: lm.name }),
+          lm.neighborhood ? el('p', { class: 'card-hood', text: lm.neighborhood }) : null,
           lm.category ? el('span', { class: 'chip', text: lm.category }) : null,
         ]),
       ]),

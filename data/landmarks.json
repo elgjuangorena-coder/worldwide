@@ -2,6 +2,7 @@
   {
     "id": "tokyo-sensoji",
     "name": "Senso-ji",
+    "neighborhood": "Asakusa",
     "category": "Templo",
     "description": "El templo budista más antiguo de Tokio. Entra por la puerta Kaminarimon y recorre la calle Nakamise llena de puestos de comida y recuerdos.",
     "lat": 35.714765,
@@ -10,6 +11,7 @@
   {
     "id": "tokyo-ueno-park",
     "name": "Parque Ueno",
+    "neighborhood": "Ueno",
     "category": "Parque",
     "description": "Gran parque con museos, el zoológico de Ueno y cientos de cerezos. Ideal en temporada de sakura (finales de marzo a inicios de abril).",
     "lat": 35.714622,
@@ -18,6 +20,7 @@
   {
     "id": "tokyo-skytree",
     "name": "Tokyo Skytree",
+    "neighborhood": "Oshiage",
     "category": "Mirador",
     "description": "La torre más alta de Japón (634 m). Sus miradores ofrecen vistas de toda la ciudad y, en días despejados, del monte Fuji.",
     "lat": 35.710063,
@@ -26,6 +29,7 @@
   {
     "id": "tokyo-shibuya-crossing",
     "name": "Cruce de Shibuya",
+    "neighborhood": "Shibuya",
     "category": "Icono urbano",
     "description": "El cruce peatonal más famoso del mundo. Míralo desde arriba en el mirador Shibuya Sky o desde el Starbucks frente a la estación.",
     "lat": 35.659487,
@@ -34,6 +38,7 @@
   {
     "id": "tokyo-meiji-jingu",
     "name": "Santuario Meiji",
+    "neighborhood": "Harajuku",
     "category": "Santuario",
     "description": "Santuario sintoísta rodeado de un bosque enorme en pleno centro, junto a Harajuku. Pasa por el gran torii de madera.",
     "lat": 35.676398,
@@ -42,6 +47,7 @@
   {
     "id": "tokyo-tower",
     "name": "Tokyo Tower",
+    "neighborhood": "Shiba Kōen",
     "category": "Mirador",
     "description": "Torre roja y blanca inspirada en la Torre Eiffel. Muy bonita de noche y con buena vista desde el parque Shiba.",
     "lat": 35.658581,
@@ -50,6 +56,7 @@
   {
     "id": "tokyo-shinjuku-gyoen",
     "name": "Shinjuku Gyoen",
+    "neighborhood": "Shinjuku",
     "category": "Jardín",
     "description": "Jardín nacional que mezcla estilos japonés, inglés y francés. Perfecto para descansar entre rascacielos.",
     "lat": 35.685176,
@@ -58,6 +65,7 @@
   {
     "id": "tokyo-imperial-palace",
     "name": "Palacio Imperial",
+    "neighborhood": "Chiyoda",
     "category": "Historia",
     "description": "Residencia del emperador. Los Jardines del Este están abiertos al público y conservan muros del antiguo castillo de Edo.",
     "lat": 35.685175,
@@ -66,6 +74,7 @@
   {
     "id": "tokyo-akihabara",
     "name": "Akihabara",
+    "neighborhood": "Akihabara",
     "category": "Compras",
     "description": "El barrio del anime, los videojuegos y la electrónica. Tiendas retro, arcades y cafés temáticos por todos lados.",
     "lat": 35.698353,
@@ -74,6 +83,7 @@
   {
     "id": "tokyo-tsukiji",
     "name": "Mercado exterior de Tsukiji",
+    "neighborhood": "Tsukiji",
     "category": "Comida",
     "description": "Puestos de mariscos frescos, sushi, tamagoyaki y snacks callejeros. Ve temprano en la mañana; muchos locales cierran a mediodía.",
     "lat": 35.665498,
@@ -82,6 +92,7 @@
   {
     "id": "tokyo-teamlab-planets",
     "name": "teamLab Planets",
+    "neighborhood": "Toyosu",
     "category": "Museo",
     "description": "Museo de arte digital inmersivo donde caminas descalzo entre agua y luces. Compra boletos con anticipación.",
     "lat": 35.649133,
@@ -90,6 +101,7 @@
   {
     "id": "tokyo-ghibli-museum",
     "name": "Museo Ghibli",
+    "neighborhood": "Inokashira",
     "category": "Museo",
     "description": "Museo del Studio Ghibli en el parque Inokashira. Los boletos se venden solo por anticipado, normalmente el día 10 del mes anterior.",
     "lat": 35.696238,
