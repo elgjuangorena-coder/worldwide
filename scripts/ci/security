@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+"""Seguridad: recorre el árbol (sin .git) y da rojo si encuentra un bloque de clave
+privada o un token de GitHub. No llama a internet y nunca imprime el secreto."""
+import re
+import sys
+from pathlib import Path
+
+RAIZ = Path(__file__).resolve().parents[2]
+PATRONES = (
+    ("clave privada", re.compile(rb"-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----")),
+    ("token de GitHub", re.compile(rb"\bgh[pousr]_[A-Za-z0-9]{36}")),
+)
+
+
+def ficheros(raiz):
+    for ruta in sorted(raiz.iterdir()):
+        if ruta.name == ".git":
+            continue
+        if ruta.is_dir() and not ruta.is_symlink():
+            yield from ficheros(ruta)
+        elif ruta.is_file():
+            yield ruta
+
+
+def main():
+    revisados = 0
+    hallazgos = []
+    for ruta in ficheros(RAIZ):
+        revisados += 1
+        contenido = ruta.read_bytes()
+        for nombre, patron in PATRONES:
+            encaje = patron.search(contenido)
+            if encaje:
+                linea = contenido.count(b"\n", 0, encaje.start()) + 1
+                hallazgos.append(f"{ruta.relative_to(RAIZ).as_posix()}:{linea}: {nombre}")
+    for hallazgo in hallazgos:
+        print(f"security: ROJO {hallazgo}")
+    if hallazgos:
+        return 1
+    if not revisados:
+        print("security: ROJO no hay ningún fichero que revisar")
+        return 1
+    print(f"security: OK {revisados} ficheros revisados, sin claves privadas ni tokens de GitHub")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
