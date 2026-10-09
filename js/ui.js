@@ -22,10 +22,12 @@ function el(tag, attrs = {}, children = []) {
 
 /* ---------- Header, stats, body ---------- */
 
-export function setHeader({ kicker, title, onBack }) {
+export function setHeader({ kicker, title, subtitle, onBack }) {
   $('sheet-kicker').textContent = kicker ?? '';
   $('sheet-title').textContent = title;
   $('sheet-title').title = title;
+  $('sheet-subtitle').textContent = subtitle ?? '';
+  $('sheet-subtitle').hidden = !subtitle;
   const back = $('back-btn');
   back.hidden = !onBack;
   back.onclick = onBack ?? null;
@@ -58,7 +60,10 @@ export function regionList(items, onSelect) {
     onclick: () => onSelect(item.uid),
   }, [
     item.color ? el('span', { class: 'dot', style: `background:${item.color}` }) : null,
-    el('span', { class: 'row-name', text: item.name }),
+    el('span', { class: 'row-text' }, [
+      el('span', { class: 'row-name', text: item.name }),
+      item.sub ? el('span', { class: 'row-sub', text: item.sub }) : null,
+    ]),
     el('span', { class: `badge${item.count ? '' : ' zero'}`, text: String(item.count) }),
   ]))));
 }

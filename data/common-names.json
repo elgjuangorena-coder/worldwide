@@ -1,0 +1,10 @@
+{
+  "MEX": {
+    "Distrito Federal": { "name": "Ciudad de México", "official": "Ciudad de México" },
+    "San Pedro Garza García": "San Pedro",
+    "San Nicolás de los Garza": "San Nicolás",
+    "General Escobedo": "Escobedo",
+    "Cadereyta Jiménez": "Cadereyta",
+    "General Zuazua": "Zuazua"
+  }
+}

@@ -3,13 +3,13 @@ import { normalize } from './utils.js';
 
 const GENERIC = /\b(prefecture|province|provincia|state|estado|region|department|departamento|governorate|district|oblast|county|municipality|capital|metropolitan|autonomous|de|del|la|el|of|the)\b/g;
 
-let namesPromise = null;
+let admin1Promise = null;
+let commonPromise = null;
 
-function loadNames() {
-  namesPromise ??= fetch('data/admin1-names.json')
+function loadJson(url) {
+  return fetch(url, { cache: 'no-cache' })
     .then((r) => (r.ok ? r.json() : {}))
     .catch(() => ({}));
-  return namesPromise;
 }
 
 function key(name) {
@@ -23,16 +23,52 @@ function sameName(a, b) {
   return ka === kb || (kb.length >= 4 && ka.includes(kb)) || (ka.length >= 4 && kb.includes(ka));
 }
 
+/** `entry` is a common name, or { name, official } to also correct an outdated official name. */
+function rename(feature, entry) {
+  if (!entry) return;
+  const p = feature.properties;
+  const { name, official } = typeof entry === 'string' ? { name: entry } : entry;
+  if (name && name !== p.name) {
+    p.official ??= p.name;
+    p.name = name;
+  }
+  if (official) p.official = official;
+}
+
+/** The official name, only when it says something different from the common one. */
+export function officialName(properties) {
+  const { name, official } = properties;
+  if (!official || normalize(official) === normalize(name)) return '';
+  return official;
+}
+
 /**
- * Replaces geoBoundaries ADM1 names with common Spanish names from Natural Earth
- * (Tokyo -> Tokio, Nuevo Leon -> Nuevo León). A state is renamed only when exactly one
- * Natural Earth state falls inside it and either the subdivision counts are similar or the
- * names match, so countries where both sources use different systems keep their names.
+ * Makes the common name primary and keeps the official geoBoundaries name as `official`.
+ * States use Spanish names from Natural Earth; any level can be overridden by hand in
+ * data/common-names.json, keyed by the geoBoundaries name:
+ * { "MEX": { "San Pedro Garza García": "San Pedro", "Distrito Federal": { "name": "...", "official": "..." } } }
  */
-export async function applyAdmin1Names(iso, adm1) {
-  if (adm1.namesApplied) return;
-  adm1.namesApplied = true;
-  const entries = (await loadNames())[iso] ?? [];
+export async function applyNames(iso, level, boundaries) {
+  if (boundaries.namesApplied) return;
+  boundaries.namesApplied = true;
+  if (level === 'ADM1') await applyAdmin1Names(iso, boundaries);
+
+  commonPromise ??= loadJson('data/common-names.json');
+  const common = (await commonPromise)[iso] ?? {};
+  for (const f of boundaries.features) {
+    const p = f.properties;
+    rename(f, common[p.official ?? p.name] ?? common[p.name]);
+  }
+}
+
+/**
+ * A state is renamed only when exactly one Natural Earth state falls inside it and either
+ * the subdivision counts are similar or the names match, so countries where both sources
+ * use different systems (France: departments vs regions) keep their names.
+ */
+async function applyAdmin1Names(iso, adm1) {
+  admin1Promise ??= loadJson('data/admin1-names.json');
+  const entries = (await admin1Promise)[iso] ?? [];
   if (!entries.length) return;
 
   const hits = new Map();
@@ -48,11 +84,7 @@ export async function applyAdmin1Names(iso, adm1) {
   for (const [f, list] of hits) {
     if (list.length !== 1) continue;
     const [es, alts] = list[0];
-    const original = f.properties.name;
-    if (!similarCount && ![es, ...alts].some((n) => sameName(n, original))) continue;
-    if (es !== original) {
-      f.properties.altName = original;
-      f.properties.name = es;
-    }
+    if (!similarCount && ![es, ...alts].some((n) => sameName(n, f.properties.name))) continue;
+    rename(f, es);
   }
 }
