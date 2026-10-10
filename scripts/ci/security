@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-"""Seguridad: recorre el árbol (sin .git) y da rojo si encuentra un bloque de clave
-privada o un token de GitHub. No llama a internet y nunca imprime el secreto."""
+"""Seguridad: recorre el árbol (sin .git) y, si hay repositorio, el historial.
+Da rojo si encuentra un bloque de clave privada o un token de GitHub.
+No llama a internet y nunca imprime el secreto."""
+import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -9,6 +12,7 @@ RAIZ = Path(__file__).resolve().parents[2]
 PATRONES = (
     ("clave privada", re.compile(rb"-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----")),
     ("token de GitHub", re.compile(rb"\bgh[pousr]_[A-Za-z0-9]{36}")),
+    ("token de GitHub", re.compile(rb"\bgithub_pat_[A-Za-z0-9_]{22,}")),
 )
 
 
@@ -22,6 +26,33 @@ def ficheros(raiz):
             yield ruta
 
 
+def revisar_historial(raiz, hallazgos):
+    if not (raiz / ".git").exists():
+        return
+    resultado = subprocess.run(
+        ["git", "log", "-p", "--all"],
+        cwd=raiz,
+        capture_output=True,
+        timeout=120,
+        env={**os.environ, "GIT_PAGER": "cat", "GIT_TERMINAL_PROMPT": "0"},
+    )
+    if resultado.returncode != 0:
+        hallazgos.append(".git: no se pudo leer el historial")
+        return
+    trozos = re.split(rb"(?m)^commit ([0-9a-f]{7,40})(?:[ \t]+\([^\n]*\))?\n", resultado.stdout)
+    if len(trozos) < 3:
+        return
+    pares = trozos[1:]
+    vistos = set()
+    for indice in range(0, len(pares) - 1, 2):
+        sha = pares[indice].decode("ascii")
+        cuerpo = pares[indice + 1]
+        for nombre, patron in PATRONES:
+            if patron.search(cuerpo) and (sha, nombre) not in vistos:
+                vistos.add((sha, nombre))
+                hallazgos.append(f"{sha}: {nombre}")
+
+
 def main():
     revisados = 0
     hallazgos = []
@@ -33,6 +64,7 @@ def main():
             if encaje:
                 linea = contenido.count(b"\n", 0, encaje.start()) + 1
                 hallazgos.append(f"{ruta.relative_to(RAIZ).as_posix()}:{linea}: {nombre}")
+    revisar_historial(RAIZ, hallazgos)
     for hallazgo in hallazgos:
         print(f"security: ROJO {hallazgo}")
     if hallazgos:

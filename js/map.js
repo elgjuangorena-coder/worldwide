@@ -1,6 +1,6 @@
 const STYLES = {
-  light: 'https://tiles.openfreemap.org/styles/liberty',
-  dark: 'https://tiles.openfreemap.org/styles/dark',
+  light: 'data/styles/liberty.json',
+  dark: 'data/styles/dark.json',
 };
 const STYLE_KEY = 'worldwide.mapStyle';
 const SECONDS_PER_REVOLUTION = 100;
