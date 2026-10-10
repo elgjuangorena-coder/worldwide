@@ -11,6 +11,7 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from urllib.parse import urlparse
 
 RAIZ = Path(__file__).resolve().parents[1]
 LINT = "scripts/ci/lint"
@@ -339,6 +340,17 @@ class ComprobacionTest(unittest.TestCase):
             self.assertTrue(
                 isinstance(enlace, str) and enlace.startswith("http"),
                 f"R2: {nombre} no tiene googleMapsUrl",
+            )
+            partes = urlparse(enlace)
+            host = partes.netloc.lower()
+            ruta = partes.path or ""
+            abre_en_el_iphone = host == "maps.google.com" or (
+                host in {"www.google.com", "google.com"}
+                and (ruta == "/maps" or ruta.startswith("/maps/"))
+            )
+            self.assertTrue(
+                abre_en_el_iphone,
+                f"R2: {nombre} tiene un enlace de Maps que el iPhone no abre: {enlace}",
             )
             ident = lugar.get("id")
             self.assertTrue(isinstance(ident, str) and ident.strip(), f"R3: {nombre} no tiene id")
