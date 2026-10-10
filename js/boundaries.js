@@ -53,9 +53,9 @@ async function fetchMeta(iso, level) {
 }
 
 /** github.com/.../raw/ redirects without CORS headers; the LFS media host allows CORS. */
-function candidateUrls(url) {
+export function candidateUrls(url) {
   const m = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/raw\/(.+)$/);
-  if (!m) return [url];
+  if (!m) return [];
   const [, owner, repo, rest] = m;
   return [
     `https://media.githubusercontent.com/media/${owner}/${repo}/${rest}`,
