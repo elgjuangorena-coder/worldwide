@@ -60,8 +60,8 @@ function onStyleLoad() {
   map.setProjection({ type: 'globe' });
   try {
     map.setSky({
-      'sky-color': '#0b1026',
-      'horizon-color': '#38e1ff',
+      'sky-color': '#FFF7ED',
+      'horizon-color': '#0891B2',
       'atmosphere-blend': ['interpolate', ['linear'], ['zoom'], 0, 1, 5, 1, 7, 0],
     });
   } catch {
@@ -85,7 +85,7 @@ function addLayers() {
     type: 'fill',
     source: 'countries',
     paint: {
-      'fill-color': ['case', ['>', COUNT, 0], '#ffcc33', '#38e1ff'],
+      'fill-color': ['case', ['>', COUNT, 0], '#EA580C', '#0891B2'],
       'fill-opacity': ['case', HOVER, 0.4, ['>', COUNT, 0], 0.3, 0.06],
     },
   });
@@ -94,7 +94,7 @@ function addLayers() {
     type: 'line',
     source: 'countries',
     paint: {
-      'line-color': ['case', ['>', COUNT, 0], '#ffcc33', 'rgba(255,255,255,0.55)'],
+      'line-color': ['case', ['>', COUNT, 0], '#EA580C', '#0891B2'],
       'line-width': ['interpolate', ['linear'], ['zoom'], 1, 0.6, 6, 1.5],
     },
   });
@@ -127,7 +127,7 @@ function addLayers() {
     type: 'line',
     source: 'focus',
     layout: { 'line-join': 'round' },
-    paint: { 'line-color': '#0b1026', 'line-width': 3, 'line-dasharray': [2, 1.5] },
+    paint: { 'line-color': '#0F172A', 'line-width': 3, 'line-dasharray': [2, 1.5] },
   });
 
   map.addLayer({
@@ -143,7 +143,7 @@ function addLayers() {
       'text-max-width': 8,
       'symbol-sort-key': ['-', 0, COUNT],
     },
-    paint: { 'text-color': '#101530', 'text-halo-color': '#ffffff', 'text-halo-width': 2 },
+    paint: { 'text-color': '#0F172A', 'text-halo-color': '#ffffff', 'text-halo-width': 2 },
   });
   map.addLayer({
     id: 'labels-count-circle',
@@ -152,8 +152,8 @@ function addLayers() {
     filter: ['>', COUNT, 0],
     paint: {
       'circle-radius': 13,
-      'circle-color': '#ffcc33',
-      'circle-stroke-color': '#1b1400',
+      'circle-color': '#EA580C',
+      'circle-stroke-color': '#FFFFFF',
       'circle-stroke-width': 2,
     },
   });
@@ -169,7 +169,7 @@ function addLayers() {
       'text-allow-overlap': true,
       'text-ignore-placement': true,
     },
-    paint: { 'text-color': '#1b1400' },
+    paint: { 'text-color': '#000000' },
   });
 
   map.addLayer({
@@ -178,7 +178,7 @@ function addLayers() {
     source: 'landmarks',
     paint: {
       'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 4, 10, 8, 15, 11],
-      'circle-color': ['case', ['get', 'visited'], '#3ddc84', '#ff5c7a'],
+      'circle-color': ['case', ['get', 'visited'], '#64748B', '#EA580C'],
       'circle-stroke-color': '#ffffff',
       'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 2, 1, 10, 2.5],
     },
@@ -195,7 +195,7 @@ function addLayers() {
       'text-anchor': 'top',
       'text-max-width': 9,
     },
-    paint: { 'text-color': '#101530', 'text-halo-color': '#ffffff', 'text-halo-width': 2 },
+    paint: { 'text-color': '#0F172A', 'text-halo-color': '#ffffff', 'text-halo-width': 2 },
   });
 }
 

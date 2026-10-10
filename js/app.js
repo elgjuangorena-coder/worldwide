@@ -213,7 +213,7 @@ function showWorld(args = {}, { move = true } = {}) {
     })
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   UI.setBody(
-    UI.hint('Gira el globo y toca un país, o búscalo arriba. Los países en amarillo tienen landmarks guardados.'),
+    UI.hint('Gira el globo y toca un país, o búscalo arriba. Los países en naranja tienen landmarks guardados.'),
     items.length ? UI.sectionTitle('Tus países') : null,
     items.length ? UI.regionList(items, (iso) => go(iso)) : null,
     UI.sectionTitle('Mapas guardados en este navegador'),
