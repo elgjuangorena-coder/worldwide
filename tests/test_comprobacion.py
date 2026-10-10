@@ -22,6 +22,13 @@ HOSTS_POLITICA = frozenset({
     "media.githubusercontent.com",
     "raw.githubusercontent.com",
 })
+LUGARES_DE_PRUEBA = (
+    "Akihabara",
+    "Museo Ghibli",
+    "Palacio Imperial",
+    "Shinjuku Gyoen",
+)
+CATEGORIAS_LUGAR = frozenset({"Para ver", "Para comer"})
 SCRIPT_FRONTERAS = r"""
 import vm from 'node:vm';
 import path from 'node:path';
@@ -280,6 +287,64 @@ class ComprobacionTest(unittest.TestCase):
         )
         self.assertNotIn(token, salida, "R4: security imprime el secreto que encontró")
         self.assertRegex(salida, r"[0-9a-f]{7,40}", "R4: el rojo no nombra el commit")
+
+    def test_lugares_del_cuaderno(self):
+        lugares = json.loads((RAIZ / "data" / "landmarks.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(lugares), 46, "R1: no están los 46 lugares del cuaderno")
+        nombres = [lugar.get("name") for lugar in lugares]
+        for nombre in LUGARES_DE_PRUEBA:
+            self.assertNotIn(nombre, nombres, f"R1: sigue el lugar de prueba {nombre}")
+        senso = [
+            lugar for lugar in lugares
+            if lugar.get("name") == "Senso-ji y la calle Nakamise"
+        ]
+        self.assertEqual(len(senso), 1, "R1: falta Senso-ji y la calle Nakamise")
+        self.assertEqual(
+            senso[0].get("category"), "Para ver",
+            "R1: Senso-ji y la calle Nakamise no está como Para ver",
+        )
+        ids = []
+        for lugar in lugares:
+            nombre = lugar.get("name")
+            self.assertTrue(isinstance(nombre, str) and nombre.strip(), "R2: un lugar no tiene name")
+            barrio = lugar.get("neighborhood")
+            self.assertTrue(
+                isinstance(barrio, str) and barrio.strip(),
+                f"R2: {nombre} no tiene neighborhood",
+            )
+            self.assertIn(
+                lugar.get("category"), CATEGORIAS_LUGAR,
+                f"R2: {nombre} no es Para ver ni Para comer",
+            )
+            descripcion = lugar.get("description")
+            self.assertTrue(
+                isinstance(descripcion, str) and descripcion.strip(),
+                f"R2: {nombre} no tiene description",
+            )
+            lat = lugar.get("lat")
+            lng = lugar.get("lng")
+            self.assertTrue(
+                isinstance(lat, (int, float)) and not isinstance(lat, bool),
+                f"R2: {nombre} no tiene lat numérica",
+            )
+            self.assertTrue(
+                isinstance(lng, (int, float)) and not isinstance(lng, bool),
+                f"R2: {nombre} no tiene lng numérica",
+            )
+            self.assertGreaterEqual(lat, 24, f"R2: {nombre} tiene lat fuera de Japón")
+            self.assertLessEqual(lat, 46, f"R2: {nombre} tiene lat fuera de Japón")
+            self.assertGreaterEqual(lng, 122, f"R2: {nombre} tiene lng fuera de Japón")
+            self.assertLessEqual(lng, 154, f"R2: {nombre} tiene lng fuera de Japón")
+            enlace = lugar.get("googleMapsUrl")
+            self.assertTrue(
+                isinstance(enlace, str) and enlace.startswith("http"),
+                f"R2: {nombre} no tiene googleMapsUrl",
+            )
+            ident = lugar.get("id")
+            self.assertTrue(isinstance(ident, str) and ident.strip(), f"R3: {nombre} no tiene id")
+            ids.append(ident)
+        self.assertEqual(len(set(ids)), len(ids), "R3: hay id repetidos")
+        self.assertEqual(len(set(nombres)), len(nombres), "R3: hay name repetidos")
 
 
 if __name__ == "__main__":
