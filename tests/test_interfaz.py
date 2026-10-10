@@ -41,6 +41,13 @@ class InterfazDelCuaderno(unittest.TestCase):
         self.assertIn("chip-ver", interfaz)
         self.assertIn("chip-comer", interfaz)
 
+    def test_el_modo_oscuro_cubre_la_pagina(self):
+        css = texto("css/styles.css")
+        mapa = texto("js/map.js")
+        self.assertIn('[data-theme="dark"]', css)
+        self.assertIn("dataset.theme", mapa)
+        self.assertIn("applyPageTheme", mapa)
+
     def test_menos_movimiento_y_foco_visible(self):
         css = texto("css/styles.css")
         self.assertIn("prefers-reduced-motion", css)

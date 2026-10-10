@@ -13,6 +13,21 @@ const REGION_OPACITY_MUNI = ['case', SELECTED, 0.12, HOVER, 0.24, 0.1];
 
 let map;
 let styleName = localStorage.getItem(STYLE_KEY) === 'dark' ? 'dark' : 'light';
+
+function applyPageTheme() {
+  document.documentElement.dataset.theme = styleName;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', styleName === 'dark' ? '#0F172A' : '#FFF7ED');
+  const button = document.getElementById('style-btn');
+  if (button) {
+    const oscuro = styleName === 'dark';
+    button.setAttribute('aria-pressed', oscuro ? 'true' : 'false');
+    button.setAttribute('aria-label', oscuro ? 'Pasar a modo claro' : 'Pasar a modo oscuro');
+    button.title = oscuro ? 'Modo claro' : 'Modo oscuro';
+  }
+}
+
+applyPageTheme();
 let spinning = true;
 let mode = 'world';
 let popup = null;
@@ -60,7 +75,7 @@ function onStyleLoad() {
   map.setProjection({ type: 'globe' });
   try {
     map.setSky({
-      'sky-color': '#FFF7ED',
+      'sky-color': styleName === 'dark' ? '#0F172A' : '#FFF7ED',
       'horizon-color': '#0891B2',
       'atmosphere-blend': ['interpolate', ['linear'], ['zoom'], 0, 1, 5, 1, 7, 0],
     });
@@ -292,6 +307,7 @@ export function closePopup() {
 export function toggleStyle() {
   styleName = styleName === 'light' ? 'dark' : 'light';
   localStorage.setItem(STYLE_KEY, styleName);
+  applyPageTheme();
   map.setStyle(STYLES[styleName]);
   hovered = null;
 }

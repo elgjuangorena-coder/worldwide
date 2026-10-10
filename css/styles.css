@@ -7,11 +7,30 @@
   --muted: #475569;
   --line: #FCEAE1;
   --visited: #64748B;
+  --wash: #FDF4F0;
+  --visited-card: #F8FAFC;
+  --ok-bg: #E2E8F0;
   --radius: 18px;
   --shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   --sheet-visible: 45dvh;
   --focus: 0 0 0 3px #0891B2;
+}
+
+:root[data-theme="dark"] {
+  --paper: #0F172A;
+  --ink: #FFF7ED;
+  --see: #67E8F9;
+  --eat: #FB923C;
+  --card: #1E293B;
+  --muted: #CBD5E1;
+  --line: #334155;
+  --visited: #94A3B8;
+  --wash: #334155;
+  --visited-card: #162032;
+  --ok-bg: #334155;
+  --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --focus: 0 0 0 3px #67E8F9;
 }
 
 * { box-sizing: border-box; }
@@ -148,7 +167,7 @@ button { color: inherit; cursor: pointer; }
 }
 
 .search-results li button:hover,
-.search-results li button.active { background: #FDF4F0; }
+.search-results li button.active { background: var(--wash); }
 
 .search-results .res-name { font-weight: 700; overflow-wrap: anywhere; }
 .search-results .res-sub { display: block; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
@@ -285,7 +304,7 @@ button { color: inherit; cursor: pointer; }
   margin: 8px 4px 12px;
   padding: 12px 14px;
   border-radius: 14px;
-  background: #FDF4F0;
+  background: var(--wash);
   border: 1px dashed var(--line);
   color: var(--ink);
   font-size: 15px;
@@ -308,7 +327,7 @@ button { color: inherit; cursor: pointer; }
 }
 
 .row:hover { border-color: var(--line); }
-.row:active { background: #FDF4F0; }
+.row:active { background: var(--wash); }
 .row.empty { opacity: 0.55; }
 
 .row .dot {
@@ -361,8 +380,8 @@ button { color: inherit; cursor: pointer; }
 }
 
 .card.visited {
-  background: #F8FAFC;
-  border-color: #CBD5E1;
+  background: var(--visited-card);
+  border-color: var(--line);
 }
 
 .card-top { display: flex; align-items: flex-start; gap: 10px; }
@@ -427,7 +446,7 @@ button { color: inherit; cursor: pointer; }
 }
 
 .btn.primary { background: var(--eat); border-color: var(--eat); color: #000000; }
-.btn.ok { background: #E2E8F0; border-color: var(--visited); color: var(--visited); }
+.btn.ok { background: var(--ok-bg); border-color: var(--visited); color: var(--visited); }
 
 .maplibregl-popup-content {
   padding: 0;
@@ -525,7 +544,7 @@ button { color: inherit; cursor: pointer; }
   z-index: 50;
 }
 
-.maplibregl-ctrl-attrib { font-size: 11px; background: rgba(255, 247, 237, 0.9); }
+.maplibregl-ctrl-attrib { font-size: 11px; background: color-mix(in srgb, var(--paper) 90%, transparent); color: var(--muted); }
 
 @media (min-width: 1024px) {
   .side { width: 400px; }
@@ -580,7 +599,7 @@ button { color: inherit; cursor: pointer; }
     width: 44px;
     height: 5px;
     border-radius: 999px;
-    background: rgba(15, 23, 42, 0.28);
+    background: var(--muted);
   }
 
   .sheet-header { padding-top: 0; touch-action: none; }
