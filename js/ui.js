@@ -49,6 +49,12 @@ export function hint(text) {
   return el('p', { class: 'hint', text });
 }
 
+function chipClass(category) {
+  if (category === 'Para ver') return 'chip chip-ver';
+  if (category === 'Para comer') return 'chip chip-comer';
+  return 'chip';
+}
+
 export function sectionTitle(text) {
   return el('h2', { class: 'section-title', text });
 }
@@ -77,7 +83,7 @@ export function landmarkCards(list, { onShow, onToggleVisited, isVisited, mapsUr
         el('div', {}, [
           el('h3', { class: 'card-name', text: lm.name }),
           lm.neighborhood ? el('p', { class: 'card-hood', text: lm.neighborhood }) : null,
-          lm.category ? el('span', { class: 'chip', text: lm.category }) : null,
+          lm.category ? el('span', { class: chipClass(lm.category), text: lm.category }) : null,
         ]),
       ]),
       lm.description ? el('p', { class: 'card-desc', text: lm.description }) : null,
@@ -104,7 +110,7 @@ export function popupContent(lm, { place, visited, mapsUrl, onToggleVisited }) {
   });
   return el('div', { class: 'popup' }, [
     el('h3', { text: lm.name }),
-    lm.category ? el('span', { class: 'chip', text: lm.category }) : null,
+    lm.category ? el('span', { class: chipClass(lm.category), text: lm.category }) : null,
     place ? el('p', { class: 'place', text: place }) : null,
     lm.description ? el('p', { text: lm.description }) : null,
     el('div', { class: 'actions' }, [
