@@ -604,6 +604,13 @@ button { color: inherit; cursor: pointer; }
 
   .sheet-header { padding-top: 0; touch-action: none; }
 
+  .sheet-body { touch-action: none; }
+
+  .sheet[data-snap="full"] .sheet-body {
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+  }
+
   .sheet-title { font-size: 22px; }
 
   .toast { bottom: calc(var(--sheet-visible) + 12px); }

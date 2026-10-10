@@ -242,58 +242,110 @@ export function getSnap() {
   return snap;
 }
 
+const UMBRAL = 8;
+
+/** dy > 0: el dedo sube. La lista al inicio baja la ficha aunque el buscador tape arriba. */
+export function gestureMode({ dy, atFull, scrollTop, scrolling, onList }) {
+  if (Math.abs(dy) < UMBRAL) return 'tap';
+  if (!onList) return 'sheet';
+  if (dy > 0 && !atFull) return 'sheet';
+  if (dy < 0 && scrollTop <= 0) return 'sheet';
+  if (scrolling) return 'scroll';
+  return 'sheet';
+}
+
 export function setupSheet(onChange) {
   onSheetChange = onChange ?? onSheetChange;
   const sheet = $('sheet');
-  const handles = [$('sheet-grip'), sheet.querySelector('.sheet-header')];
+  const body = sheet.querySelector('.sheet-body');
   let startY = 0;
   let startH = 0;
   let currentH = 0;
-  let dragging = false;
-  let moved = false;
+  let tracking = false;
+  let pointerId = null;
+  let onList = false;
+  let onControl = false;
+  let mode = 'tap';
+  let suppressClick = false;
 
-  const onDown = (e) => {
-    if (!isMobile() || e.target.closest('button')) return;
-    dragging = true;
-    moved = false;
-    startY = e.clientY;
-    startH = snapHeight(snap);
-    currentH = startH;
-    sheet.classList.add('dragging');
-    e.currentTarget.setPointerCapture?.(e.pointerId);
-  };
-
-  const onMove = (e) => {
-    if (!dragging) return;
-    const dy = startY - e.clientY;
-    if (Math.abs(dy) > 4) moved = true;
+  const follow = (clientY, event) => {
+    if (!tracking) return;
+    const dy = startY - clientY;
+    const next = gestureMode({
+      dy,
+      atFull: snap === 'full',
+      scrollTop: body?.scrollTop ?? 0,
+      scrolling: Boolean(body && body.scrollHeight > body.clientHeight + 1),
+      onList,
+    });
+    if (next === 'tap') return;
+    if (mode === 'tap') {
+      mode = next;
+      if (mode === 'sheet') {
+        sheet.classList.add('dragging');
+        if (event.pointerId !== undefined) sheet.setPointerCapture?.(event.pointerId);
+      }
+    }
+    if (mode !== 'sheet') return;
+    if (event.cancelable) event.preventDefault();
     currentH = Math.max(snapHeight('peek') * 0.8, Math.min(window.innerHeight * 0.92, startH + dy));
     document.documentElement.style.setProperty('--sheet-visible', `${currentH}px`);
   };
 
-  const onUp = () => {
-    if (!dragging) return;
-    dragging = false;
-    sheet.classList.remove('dragging');
-    if (!moved) {
-      setSnap(snap === 'full' ? 'peek' : SNAPS[SNAPS.indexOf(snap) + 1]);
-      return;
-    }
-    let best = snap;
-    let bestDist = Infinity;
-    for (const name of SNAPS) {
-      const d = Math.abs(snapHeight(name) - currentH);
-      if (d < bestDist) { best = name; bestDist = d; }
-    }
-    setSnap(best);
+  const onDown = (e) => {
+    if (!isMobile()) return;
+    if (e.button !== undefined && e.button !== 0) return;
+    tracking = true;
+    mode = 'tap';
+    pointerId = e.pointerId;
+    startY = e.clientY;
+    startH = snapHeight(snap);
+    currentH = startH;
+    onList = Boolean(e.target.closest('.sheet-body'));
+    onControl = Boolean(e.target.closest('button, a, input, textarea, select'));
   };
 
-  for (const h of handles) {
-    h.addEventListener('pointerdown', onDown);
-    h.addEventListener('pointermove', onMove);
-    h.addEventListener('pointerup', onUp);
-    h.addEventListener('pointercancel', onUp);
-  }
+  const finish = () => {
+    if (!tracking) return;
+    const done = mode;
+    const fromList = onList;
+    const fromControl = onControl;
+    tracking = false;
+    mode = 'tap';
+    sheet.classList.remove('dragging');
+    if (done === 'sheet') {
+      suppressClick = true;
+      let best = snap;
+      let bestDist = Infinity;
+      for (const name of SNAPS) {
+        const d = Math.abs(snapHeight(name) - currentH);
+        if (d < bestDist) { best = name; bestDist = d; }
+      }
+      setSnap(best);
+      return;
+    }
+    if (done === 'tap' && !fromList && !fromControl) {
+      setSnap(snap === 'full' ? 'peek' : SNAPS[SNAPS.indexOf(snap) + 1]);
+    }
+  };
+
+  sheet.addEventListener('pointerdown', onDown);
+  sheet.addEventListener('pointermove', (e) => {
+    if (!tracking || e.pointerId !== pointerId) return;
+    follow(e.clientY, e);
+  });
+  sheet.addEventListener('pointerup', finish);
+  sheet.addEventListener('pointercancel', finish);
+  sheet.addEventListener('touchmove', (e) => {
+    if (!tracking || !e.touches.length) return;
+    follow(e.touches[0].clientY, e);
+  }, { passive: false });
+  sheet.addEventListener('click', (e) => {
+    if (!suppressClick) return;
+    suppressClick = false;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
 
   window.addEventListener('resize', () => setSnap(snap));
   setSnap(snap);
