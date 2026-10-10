@@ -38,7 +38,7 @@
     "description": "Museo dentro del parque de Ueno. Dirección: 13-9 Uenokoen, Taito City, Tokyo 110-8712.",
     "lat": 35.71904,
     "lng": 139.77597,
-    "googleMapsUrl": "https://maps.app.goo.gl/CDdNzW1HWhUreDVg8",
+    "googleMapsUrl": "https://www.google.com/maps/place/Museo+Nacional+de+Tokio/@35.7188351,139.7739466,17z/data=!3m2!4b1!5s0x60188e8352914391:0x9eb69dd4922b2d0a!4m6!3m5!1s0x60188e8314d77d11:0x232fd618bd4977dd!8m2!3d35.7188351!4d139.7765215!16zL20vMDVzazVn?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=29cae3f7-02b8-40e6-a1d8-6a57874eb3f5",
     "website": "https://www.tnm.jp/"
   },
   {
@@ -49,7 +49,7 @@
     "description": "Mercado al aire libre bajo las vías del tren, entre Ueno y Okachimachi. En la misma calle hay tiendas de ropa y pescado, y puestos para comer de pie: pollo frito, fruta y jugos. Dirección: 6 Chome-10-7 Ueno, Taito City, Tokyo 110-0005.",
     "lat": 35.71002,
     "lng": 139.77454,
-    "googleMapsUrl": "https://maps.app.goo.gl/wcRSFKzczshXKaAQ7"
+    "googleMapsUrl": "https://www.google.com/maps/place/Ameyoko+market/@35.7100682,139.772026,17z/data=!3m1!4b1!4m6!3m5!1s0x60188f00af83b787:0x654b0a29a45fcf0a!8m2!3d35.7100682!4d139.7746009!16s%2Fm%2F0jt2zd3?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=e6e2f216-2372-43e8-84f7-4513043487e3"
   },
   {
     "id": "tokio-taito-puestos-de-nakamise",
@@ -59,7 +59,7 @@
     "description": "Dulces (ningyoyaki), galletas de arroz (senbei) y helado de matcha, para picar de pie. En Maps es Calle Comercial Nakamise, 1 Chome-36-3 Asakusa, Taito City, Tokyo 111-0032.",
     "lat": 35.71252,
     "lng": 139.79652,
-    "googleMapsUrl": "https://maps.app.goo.gl/HUteidVZT1HbQCY28"
+    "googleMapsUrl": "https://www.google.com/maps/place/Calle+Comercial+Nakamise/@35.7118413,139.7916906,17z/data=!4m7!3m6!1s0x60188ec130fbdd3d:0x5135221a7fa19dbc!8m2!3d35.7118413!4d139.7964542!15sChNQdWVzdG9zIGRlIE5ha2FtaXNlWhUiE3B1ZXN0b3MgZGUgbmFrYW1pc2WSARJ0b3VyaXN0X2F0dHJhY3Rpb26aAURDaTlEUVVsUlFVTnZaRU5vZEhsalJqbHZUMnhrUlZrd2NGQmlSMlJNVmpGb1IxcHJhRE5pUmxGNFVqQlNUR1ZyUlJBQuABAPoBBAhnEDw!16s%2Fg%2F11rg73mbfv?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=947cacbb-2754-4695-aab3-9af6df10e7f4"
   },
   {
     "id": "tokio-taito-ichiran-de-asakusa",
@@ -69,7 +69,7 @@
     "description": "Ramen de tonkotsu, en mostrador. El pin es el sótano del 1 Chome-1-16 Asakusa, edificio HK Asakusa. El otro local es Asakusa Rokku, piso 2, 2-6-11.",
     "lat": 35.711183,
     "lng": 139.797616,
-    "googleMapsUrl": "https://maps.app.goo.gl/bjVy5CvZwAJVwAy28",
+    "googleMapsUrl": "https://www.google.com/maps/place/Ichiran+Asakusa/@35.7127897,139.7955708,18z/data=!3m1!5s0x60188ec6966918f7:0xa9f53dcfcf0009bd!4m7!3m6!1s0x60188ec6be01feef:0x9736b3e4d24be9de!8m2!3d35.7111828!4d139.7976164!15sCg9JY2hpcmFuIEFzYWt1c2EiA4gBAVoRIg9pY2hpcmFuIGFzYWt1c2GSARByYW1lbl9yZXN0YXVyYW50mgFEQ2k5RFFVbFJRVU52WkVOb2RIbGpSamx2VDJ0c1MyVldiRmxXUlZaT1ZFVmFjV05ZUlhoaFZYaHdVME13ZEZKR1JSQULgAQD6AQQINxAu!16s%2Fg%2F11bwkyw6hf?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=3deab38b-8471-41bb-ba06-44b44ddf4006",
     "website": "https://en.ichiran.com/shop/area-tokyo.html"
   },
   {
@@ -80,7 +80,7 @@
     "description": "Carne de res empanizada (gyukatsu). Asakusa Orange Street, 1-16-11 Asakusa, Taito. Solo esta sucursal.",
     "lat": 35.711562,
     "lng": 139.794633,
-    "googleMapsUrl": "https://maps.app.goo.gl/UckGE3E2PVnRq3tP7",
+    "googleMapsUrl": "https://www.google.com/maps/place/GYUKATSU+Kyoto+Katsugyu+Asakusa+Orange+Street/@35.7115624,139.7924447,17z/data=!3m1!5s0x60188ec0b620c293:0xabb717fdf152bd5d!4m7!3m6!1s0x60188fe7c650ca47:0x513ba5c11498ece6!8m2!3d35.7115624!4d139.7946334!15sCidHeXVrYXRzdSBLeW90byBLYXRzdWd5dSAxLTE2LTExIEFzYWt1c2FaKSInZ3l1a2F0c3Uga3lvdG8ga2F0c3VneXUgMSAxNiAxMSBhc2FrdXNhkgEgY2FzdWFsX2phcGFuZXNlX3N0eWxlX3Jlc3RhdXJhbnSaAURDaTlEUVVsUlFVTnZaRU5vZEhsalJqbHZUMnN3ZUZWc2NFSmhWMVpEVjBkNFRtUXdjRlJUUjJocFZWVmFTRlF6WXhBQuABAPoBBAgAEEE!16s%2Fg%2F11wwpj_fp0?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=41422db3-d3f6-4131-933c-0aaf7f6bd29d",
     "website": "https://gyukatsu-kyotokatsugyu.com/store"
   },
   {
@@ -133,7 +133,7 @@
     "description": "Museo de peces de colores, con luz y música, dentro de Ginza Mitsukoshi. Se entra por el piso 9 del edificio nuevo. Dirección: 4-6-16 Ginza, Chuo. Esta sede sigue hasta el 6 de enero de 2027.",
     "lat": 35.67129,
     "lng": 139.76574,
-    "googleMapsUrl": "https://goo.gl/maps/pmepK43JJDVHUFs29",
+    "googleMapsUrl": "https://www.google.com/maps/place/%E9%8A%80%E5%BA%A7%E4%B8%89%E8%B6%8A/@35.6712464,139.7658951,21z/data=!3m1!5s0x60188be692f7e16b:0xcfdcef9aeaad9b06!4m5!3m4!1s0x60188be68e21d35f:0x91fb4ae4762f83be!8m2!3d35.6712864!4d139.7657382?hl=ja&shorturl=1",
     "website": "https://artaquarium.jp/"
   },
   {
@@ -154,7 +154,7 @@
     "description": "Cafetería en Ginza 1-chome 24-11, Chuo, a unos minutos a pie del mercado de Tsukiji. Es para un café.",
     "lat": 35.67279,
     "lng": 139.7713,
-    "googleMapsUrl": "https://maps.app.goo.gl/h8sseeQvaZTyGW1P9"
+    "googleMapsUrl": "https://www.google.com/maps/place/Age.3+GINZA/@35.6727584,139.7712945,17z/data=!3m1!4b1!4m6!3m5!1s0x60188b9dffe9b1e7:0xf81b31918420debe!8m2!3d35.6727584!4d139.7712945!16s%2Fg%2F11vkhy1hd5?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=0fb219f2-cafb-4a54-bf52-b27ca695c2ee"
   },
   {
     "id": "tokio-minato-tokyo-tower",
@@ -175,7 +175,7 @@
     "description": "Museo de salas de arte que se mezclan, sin un recorrido fijo, en Azabudai Hills. Es otro museo y otro municipio que teamLab Planets (Planets está en Koto). Garden Plaza B, sótano 1. Dirección: Toranomon 5-chome 9, Minato.",
     "lat": 35.662133,
     "lng": 139.740901,
-    "googleMapsUrl": "https://maps.app.goo.gl/c97XS2Sc5oDPtjvy6",
+    "googleMapsUrl": "https://www.google.com/maps/place/teamLab+Borderless:+MORI+Building+DIGITAL+ART+MUSEUM/@35.6604422,139.7346353,14z/data=!4m6!3m5!1s0x601889fad49a9443:0x5831aba3288d2651!8m2!3d35.6621333!4d139.7409009!16s%2Fg%2F11ggvtjmjl?sa=X&ved=2ahUKEwiyxsTNqfCDAxXKr1YBHW8OAvUQ_BJ6BAgQEAA&entry=tts",
     "website": "https://www.teamlab.art/e/tokyo/"
   },
   {
@@ -281,7 +281,7 @@
     "description": "La cabeza de Godzilla en la fachada, en el edificio Toho. Se ve desde la calle. Dirección: 1-19-1 Kabukicho, Shinjuku. A unos 5 minutos a pie de la salida este de la estación Shinjuku.",
     "lat": 35.69556,
     "lng": 139.70228,
-    "googleMapsUrl": "https://maps.app.goo.gl/gyqJkPoSdqLtKx8f7",
+    "googleMapsUrl": "https://www.google.com/maps/place/%E3%83%9B%E3%83%86%E3%83%AB%E3%82%B0%E3%83%AC%E3%82%A4%E3%82%B9%E3%83%AA%E3%83%BC%E6%96%B0%E5%AE%BF/@35.6953311,139.6994593,17z/data=!3m1!5s0x60188cd8241c6fb7:0xb49c0a4902f43c01!4m10!3m9!1s0x60188cd82535e517:0x9db5eb8a28bbac69!5m3!1s2024-09-23!4m1!1i2!8m2!3d35.6953268!4d139.7020342!16s%2Fg%2F11b6vbzstj!5m1!1e4?entry=tts&g_ep=EgoyMDI0MDkwNC4wKgBIAVAD",
     "website": "https://en.gracery.com/shinjuku/"
   },
   {
@@ -292,7 +292,7 @@
     "description": "Museo para recorrer descalzo, con salas de agua. Es otro museo y otro municipio que teamLab Borderless. Dirección: 6-1-16 Toyosu, Koto. Estación Shin-Toyosu, salida norte, un minuto a pie.",
     "lat": 35.649121,
     "lng": 139.789774,
-    "googleMapsUrl": "https://maps.app.goo.gl/CNXNNw2zvS6TMiHP8",
+    "googleMapsUrl": "https://www.google.com/maps/place/%E3%83%81%E3%83%BC%E3%83%A0%E3%83%A9%E3%83%9C%E3%83%97%E3%83%A9%E3%83%8D%E3%83%83%E3%83%84+TOKYO+DMM/@35.6491207,139.787199,1012m/data=!3m2!1e3!4b1!4m6!3m5!1s0x60188908e728e749:0x6de450c94bd3d622!8m2!3d35.6491207!4d139.7897739!16s%2Fg%2F11ghxr0p5m?entry=tts&g_ep=EgoyMDI1MDUwNy4wIPu8ASoASAFQAw%3D%3D&skid=9a9098ee-0b7c-4102-bb30-d24fbc5dfe87",
     "website": "https://www.teamlab.art/e/planets/"
   },
   {
@@ -303,7 +303,7 @@
     "description": "Museo del ramen de vaso, en Shinko. Cuenta la historia de Momofuku Ando y se puede armar un vaso propio. Unas dos horas. Dirección: 2-3-4 Shinko, Naka. Estación Sakuragicho o Minatomirai.",
     "lat": 35.4555,
     "lng": 139.63889,
-    "googleMapsUrl": "https://maps.app.goo.gl/ejfUUwGrb9JbGygj7",
+    "googleMapsUrl": "https://www.google.com/maps/place/Cup+Noodles+Museum/@35.4554755,139.6366782,736m/data=!3m1!1e3!4m7!3m6!1s0x60185c577b6193dd:0x7368667740b93abe!8m2!3d35.4554755!4d139.6388669!15sChpDVVBOT09ETEVTIE1VU0VVTSBZT0tPSEFNQVocIhpjdXBub29kbGVzIG11c2V1bSB5b2tvaGFtYZIBBm11c2V1bZoBI0NoWkRTVWhOTUc5blMwVkpRMEZuVFVOUmFrNXBiMDFSRUFF4AEA-gEECCQQTA!16s%2Fg%2F1211cdfm?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=4d43b16e-f210-43b3-bf72-8bbfcdeadcb8",
     "website": "https://www.cupnoodles-museum.jp/en/yokohama/"
   },
   {
@@ -356,7 +356,7 @@
     "description": "El comedor de fideos que está dentro del Cup Noodles Museum, en Shinko. Sirve para el mediodía.",
     "lat": 35.45557,
     "lng": 139.639,
-    "googleMapsUrl": "https://maps.app.goo.gl/ZcgBvfcPLEVVY6L96"
+    "googleMapsUrl": "https://www.google.com/maps/place/NOODLES+BAZAAR/@35.455405,139.6387933,736m/data=!3m2!1e3!4b1!4m6!3m5!1s0x60185df2a7e461af:0xc5e8176e939cabe!8m2!3d35.455405!4d139.6387933!16s%2Fg%2F11h1j0k97l?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=bb278e22-4d4c-4f2d-b22f-4e93b4cbac00"
   },
   {
     "id": "yokohama-naka-chinatown-de-yokohama",
@@ -388,7 +388,7 @@
     "description": "Calle de neón en 1-chome Dotonbori, Chuo. El punto fácil es el puente Ebisubashi, el del letrero de Glico.",
     "lat": 34.66903,
     "lng": 135.50157,
-    "googleMapsUrl": "https://maps.app.goo.gl/SE6yMd99QKrn7gVr8"
+    "googleMapsUrl": "https://www.google.com/maps/place/D%C5%8Dtonbori/@34.6687234,135.4991084,743m/data=!3m1!1e3!4m7!3m6!1s0x6000e713818af9fd:0xb8bb1326b48ba590!8m2!3d34.6687234!4d135.5012971!15sChwxIENob21lIERvdG9uYm9yaSBDaHVvIE9zYWthWh4iHDEgY2hvbWUgZG90b25ib3JpIGNodW8gb3Nha2GSARJ0b3VyaXN0X2F0dHJhY3Rpb26aASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVUllkV00yVkdaM0VBReABAPoBBAhIEEI!16zL20vMDN4eGgz?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=e8927667-49f2-4a6f-9a42-9cf335d56132"
   },
   {
     "id": "osaka-chuo-hozenji-yokocho",
@@ -408,7 +408,7 @@
     "description": "Puesto de takoyaki junto al canal, al lado del Don Quijote de la rueda. Los entregan recién hechos y se comen en las escaleras frente al agua. Dirección: 7-19 Souemoncho, Chuo Ward, Osaka, 542-0084.",
     "lat": 34.66924,
     "lng": 135.503199,
-    "googleMapsUrl": "https://maps.app.goo.gl/hE1gdRZbyZF3us9B9"
+    "googleMapsUrl": "https://www.google.com/maps/place/Achichi+Honpo+Dotonbori/@34.6692402,135.5031992,743m/data=!3m2!1e3!4b1!4m6!3m5!1s0x6000e714f6c458d5:0x3e62c4440ae805e9!8m2!3d34.6692402!4d135.5031992!16s%2Fg%2F1tjgpgy9?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=0523cc90-721a-4eaa-9473-1d0a88eb84c5"
   },
   {
     "id": "osaka-chuo-mercado-kuromon",
@@ -438,7 +438,7 @@
     "description": "Brochetas empanizadas (kushikatsu), en Shinsekai. Dirección: 2 Chome-4-19 Ebisuhigashi, Naniwa Ward, Osaka, 556-0002.",
     "lat": 34.651505,
     "lng": 135.506239,
-    "googleMapsUrl": "https://maps.app.goo.gl/aikU411MbAoCUVwE6"
+    "googleMapsUrl": "https://www.google.com/maps/place/Hanamichi/@34.6515048,135.5040501,743m/data=!3m1!1e3!4m7!3m6!1s0x6000e760087f60df:0x6a60f779a74f1470!8m2!3d34.6515048!4d135.5062388!15sCgpLdXNoaWthdHN1WgwiCmt1c2hpa2F0c3WSARJza2V3ZXJfZGVlcF9mcnlpbmeaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVUTNlRXhZYVU1bkVBReABAPoBBAgAEDc!16s%2Fg%2F1tk62_w6?entry=tts&g_ep=EgoyMDI2MTAwNy4wIPu8ASoASAFQAw%3D%3D&skid=d51b9b7c-73bf-4b6b-b2fa-6fd54575dd3b"
   },
   {
     "id": "osaka-abeno-abeno-harukas",
@@ -470,7 +470,7 @@
     "description": "Mirador en la azotea del Umeda Sky Building: el jardín entre las dos torres, para ver la ciudad al atardecer. Dirección: 1-1-88 Oyodonaka, Kita, 531-6023. Se llega caminando desde la estación JR Osaka.",
     "lat": 34.705287,
     "lng": 135.489653,
-    "googleMapsUrl": "https://maps.app.goo.gl/at8Ujw3U3K7FTEM57",
+    "googleMapsUrl": "https://www.google.com/maps/place/Umeda+Sky+Building+(osaka)/@34.7052916,135.4870778,817m/data=!3m3!1e3!4b1!5s0x6000e688863f7021:0x4ceb5b0522a7c0c0!4m6!3m5!1s0x6000e6889074276f:0x57c2e32670decafd!8m2!3d34.7052872!4d135.4896527!16zL20vMDNfZjE3?entry=tts&g_ep=EgoyMDI2MDkzMC4wIPu8ASoASAFQAw%3D%3D&skid=2a1ebefa-4662-4c65-bc06-40e4a0f14a57",
     "website": "https://www.skybldg.co.jp/en/"
   },
   {
