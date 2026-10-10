@@ -127,7 +127,8 @@ export function storagePanel({ load, onClear }) {
       button.hidden = true;
       return;
     }
-    text.textContent = `${countries.join(', ')} · ${megabytes.toFixed(1)} MB. Se vuelven a descargar solos si los borras.`;
+    const donde = countries.length === 1 ? 'al país' : 'a esos países';
+    text.textContent = `${countries.join(', ')} · ${megabytes.toFixed(1)} MB. Borrar libera ese espacio hasta que vuelvas a entrar ${donde}.`;
     button.hidden = false;
   };
 
