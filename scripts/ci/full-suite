@@ -4,4 +4,4 @@ set -eu
 cd "$(dirname "$0")/../.."
 scripts/ci/lint
 scripts/ci/security
-python3 -B -m unittest -v tests/test_comprobacion.py tests/test_interfaz.py
+python3 -B -m unittest -v tests/test_comprobacion.py tests/test_interfaz.py tests/test_ficha_movil.py tests/test_scripts_fijos.py tests/test_ubicacion.py
