@@ -497,6 +497,18 @@ button { color: inherit; cursor: pointer; }
 
 .ctrl-btn:active { background: var(--paper); }
 
+.ctrl-btn:disabled { opacity: 0.6; }
+
+.me-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #2563EB;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.25), 0 1px 4px rgba(15, 23, 42, 0.4);
+  pointer-events: none;
+}
+
 .loading {
   position: fixed;
   left: 50%;

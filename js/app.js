@@ -54,8 +54,42 @@ async function init() {
   UI.setupSearch({ search, onSelect: onSearchSelect });
   document.getElementById('home-btn').addEventListener('click', () => go());
   document.getElementById('style-btn').addEventListener('click', () => M.toggleStyle());
+  document.getElementById('locate-btn').addEventListener('click', () => locateMe());
   window.addEventListener('hashchange', route);
   route();
+}
+
+/* ---------- Mi ubicación (solo al pulsar el botón; no se guarda ni se envía) ---------- */
+
+const LOCATE_ERRORS = {
+  1: 'No diste permiso para ver tu ubicación.',
+  2: 'No se pudo saber dónde estás. Prueba otra vez.',
+  3: 'Tardó demasiado en encontrar tu ubicación. Prueba otra vez.',
+};
+
+function locateMe() {
+  if (!navigator.geolocation) {
+    UI.toast('Este navegador no puede dar tu ubicación.');
+    return;
+  }
+  const button = document.getElementById('locate-btn');
+  button.disabled = true;
+  button.setAttribute('aria-busy', 'true');
+  const done = () => {
+    button.disabled = false;
+    button.removeAttribute('aria-busy');
+  };
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      done();
+      M.showMyLocation([position.coords.longitude, position.coords.latitude]);
+    },
+    (error) => {
+      done();
+      UI.toast(LOCATE_ERRORS[error.code] ?? LOCATE_ERRORS[2]);
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 },
+  );
 }
 
 function buildCountryIndex(features) {

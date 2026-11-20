@@ -31,6 +31,7 @@ applyPageTheme();
 let spinning = true;
 let mode = 'world';
 let popup = null;
+let meMarker = null;
 let hovered = null;
 let selectedUid = null;
 let handlers = {};
@@ -264,6 +265,15 @@ export function fitBbox(bbox, maxZoom = 14) {
 export function flyTo(lngLat, zoom) {
   spinning = false;
   map.flyTo({ center: lngLat, zoom: Math.max(map.getZoom(), zoom), padding: getPadding(), duration: 1200, essential: true });
+}
+
+/** Puts the blue "you are here" dot at lngLat (one dot, reused) and flies there at street zoom. */
+export function showMyLocation(lngLat) {
+  meMarker ??= new maplibregl.Marker({
+    element: Object.assign(document.createElement('div'), { className: 'me-dot', ariaHidden: 'true' }),
+  }).setLngLat(lngLat).addTo(map);
+  meMarker.setLngLat(lngLat);
+  flyTo(lngLat, 16);
 }
 
 export function flyToWorld() {
