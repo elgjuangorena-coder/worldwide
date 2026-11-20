@@ -1,7 +1,7 @@
 import * as M from './map.js';
 import * as UI from './ui.js';
 import {
-  childrenOf, clearSavedBoundaries, indexFeatures, loadBoundaries, parentOf, savedBoundaries,
+  childrenOf, clearSavedBoundaries, indexFeatures, loadBoundaries, locate, parentOf, savedBoundaries,
 } from './boundaries.js';
 import {
   allLandmarks, assignCountries, assignLevel, countBy, googleMapsUrl, isVisited,
@@ -21,6 +21,7 @@ const labelCache = new WeakMap();
 let view = { level: 'world' };
 let routeToken = 0;
 let pendingLandmark = null;
+let pendingReveal = null;
 let firstRoute = true;
 
 init().catch((err) => {
@@ -82,7 +83,7 @@ function locateMe() {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       done();
-      M.showMyLocation([position.coords.longitude, position.coords.latitude]);
+      openMyPlace(position.coords, () => M.showMyLocation([position.coords.longitude, position.coords.latitude]));
     },
     (error) => {
       done();
@@ -90,6 +91,54 @@ function locateMe() {
     },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 },
   );
+}
+
+/**
+ * Opens the country, state and municipality where the person is, as if they had tapped them,
+ * and runs `reveal` (blue dot + street zoom) once that view is painted. Only the country's
+ * boundary files are downloaded; the position itself never leaves this function.
+ * Whenever the municipality can't be known, `reveal` runs right away: the old behavior.
+ */
+async function openMyPlace(coords, reveal) {
+  const { longitude, latitude } = coords;
+  const iso = locate(countries, longitude, latitude)?.properties.uid;
+  const country = countryByIso.get(iso);
+  if (!country) return reveal();
+  const revealWhenOpen = (stateUid = null, muniUid = null) => {
+    pendingReveal = { reveal, iso, stateUid, muniUid };
+  };
+  try {
+    const adm1 = await load(iso, 'ADM1', `Descargando estados de ${country.name}…`);
+    if (!adm1) return reveal();
+    assignLevel(iso, 'adm1', adm1);
+    const state = locate(adm1, longitude, latitude);
+    if (!state) {
+      revealWhenOpen();
+      return go(iso);
+    }
+    const stateUid = state.properties.uid;
+    let adm2 = null;
+    try {
+      adm2 = await load(iso, 'ADM2', `Descargando municipios de ${country.name}…`);
+    } catch (err) {
+      console.error(err);
+    }
+    if (adm2) assignLevel(iso, 'adm2', adm2);
+    const children = adm2 ? childrenOf(adm2, state) : [];
+    const muni = children.length >= 2 ? locate(adm2, longitude, latitude) : null;
+    const muniUid = muni?.properties.uid;
+    if (muniUid && children.some((c) => c.properties.uid === muniUid)) {
+      revealWhenOpen(stateUid, muniUid);
+      go(iso, stateUid, muniUid);
+    } else {
+      revealWhenOpen(stateUid);
+      go(iso, stateUid);
+    }
+  } catch (err) {
+    console.error(err);
+    UI.toast('No se pudo abrir tu municipio. Revisa tu conexión.');
+    reveal();
+  }
 }
 
 function buildCountryIndex(features) {
@@ -459,6 +508,11 @@ function showLandmark(lm, { fly = true } = {}) {
 }
 
 function openPending(lms) {
+  if (pendingReveal) {
+    const { reveal, iso, stateUid, muniUid } = pendingReveal;
+    pendingReveal = null;
+    if (view.iso === iso && view.stateUid === stateUid && view.muniUid === muniUid) setTimeout(reveal, 50);
+  }
   if (!pendingLandmark) return;
   const lm = lms.find((l) => l.id === pendingLandmark);
   pendingLandmark = null;
