@@ -191,5 +191,65 @@ class SoloAlPulsar(Caso):
                          "R6: el punto se crea en cada pulsación en vez de reutilizarse")
 
 
+class EnMiMunicipio(Caso):
+    """Unidad 011. R1 (portante): con la posición, se abre país → estado → municipio y luego el punto.
+    R2: si no se sabe el municipio, vale lo de siempre. R3: la posición no sale del celular."""
+
+    def test_r1_con_la_posicion_abre_pais_estado_y_municipio_y_luego_el_punto(self):
+        app = texto("js/app.js")
+        cuerpo = cuerpo_de_funcion(app, "openMyPlace")
+        self.assertIsNotNone(cuerpo, "R1: app.js no tiene openMyPlace()")
+
+        self.busca(app, r"import\s*\{[^}]*\blocate\b[^}]*\}\s*from\s*'\./boundaries\.js'",
+                   "R1: app.js no importa locate de boundaries.js")
+        self.busca(cuerpo, r"\blocate\(\s*countries\s*,", "R1: no se ubica el país de la persona")
+        self.busca(cuerpo, r"\bload\(\s*\w+\s*,\s*'ADM1'", "R1: no se cargan los estados")
+        self.busca(cuerpo, r"\bload\(\s*\w+\s*,\s*'ADM2'", "R1: no se cargan los municipios")
+        self.busca(cuerpo, r"\blocate\(\s*adm1\s*,", "R1: no se ubica el estado")
+        self.busca(cuerpo, r"\blocate\(\s*adm2\s*,", "R1: no se ubica el municipio")
+        self.busca(cuerpo, r"\bchildrenOf\(", "R1: no se comprueba que el municipio sea hijo del estado")
+        self.busca(cuerpo, r"\bgo\(\s*\w+\s*,\s*[\w.]+\s*,\s*[\w.]+\s*\)",
+                   "R1: no se navega a país, estado y municipio")
+
+        locate_me = cuerpo_de_funcion(app, "locateMe") or ""
+        self.busca(locate_me, r"openMyPlace\(",
+                   "R1: locateMe no abre el lugar de la persona al recibir la posición")
+        self.busca(
+            locate_me,
+            r"M\.showMyLocation\(\s*\[\s*\w+\.coords\.longitude\s*,\s*\w+\.coords\.latitude\s*\]\s*\)",
+            "R1: el punto y el zoom ya no salen de la posición recibida",
+        )
+
+        pendientes = cuerpo_de_funcion(app, "openPending") or ""
+        self.busca(pendientes, r"pendingReveal", "R1: la vista terminada no deja salir el punto y el zoom")
+        self.busca(pendientes, r"\bview\.(iso|stateUid|muniUid)\b",
+                   "R1: el punto sale aunque la persona ya esté en otra vista")
+
+    def test_r2_si_no_se_sabe_el_municipio_se_hace_lo_de_siempre(self):
+        app = texto("js/app.js")
+        cuerpo = cuerpo_de_funcion(app, "openMyPlace") or ""
+        self.assertTrue(cuerpo, "R2: app.js no tiene openMyPlace()")
+        self.assertGreaterEqual(
+            len(re.findall(r"\breveal\(\)", cuerpo)), 3,
+            "R2: el punto y el zoom no salen en cada salida (sin país, sin estados, con fallo)",
+        )
+        self.busca(cuerpo, r"catch\s*\([^)]*\)\s*\{[^}]*UI\.toast\([^}]*reveal\(\)|catch\s*\([^)]*\)\s*\{[^}]*reveal\(\)[^}]*UI\.toast\(",
+                   "R2: si falla la descarga no hay aviso y punto")
+        self.busca(cuerpo, r"children\.length\s*>=\s*2",
+                   "R2: se baja a un municipio sin comprobar que haya municipios")
+
+    def test_r3_la_posicion_no_sale_del_celular(self):
+        app = texto("js/app.js")
+        cuerpo = cuerpo_de_funcion(app, "openMyPlace") or ""
+        self.assertTrue(cuerpo, "R3: app.js no tiene openMyPlace()")
+        locate_me = cuerpo_de_funcion(app, "locateMe") or ""
+        for prohibido in ("fetch(", "localStorage", "sessionStorage", "indexedDB", "sendBeacon", "XMLHttpRequest"):
+            self.assertNotIn(prohibido, cuerpo, f"R3: openMyPlace usa {prohibido}")
+            self.assertNotIn(prohibido, locate_me, f"R3: locateMe usa {prohibido}")
+        for llamada in re.findall(r"\bload\(([^)]*)\)", cuerpo):
+            self.no_busca(llamada, r"lng|lat|coords|here|position",
+                          f"R3: a load() le llega la posición: {llamada}")
+
+
 if __name__ == "__main__":
     unittest.main()
