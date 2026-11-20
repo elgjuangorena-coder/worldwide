@@ -102,6 +102,11 @@ if (mal.length) {
         self.assertIn("gestureMode(", ui)
         self.assertNotIn("e.target.closest('button')", ui)
 
+    def test_un_toque_nuevo_no_hereda_la_bandera_del_arrastre(self):
+        ui = (RAIZ / "js/ui.js").read_text(encoding="utf-8")
+        al_tocar = ui.split("const onDown = (e) => {", 1)[1].split("const finish", 1)[0]
+        self.assertIn("suppressClick = false", al_tocar)
+
     def test_el_buscador_sigue_por_encima(self):
         css = (RAIZ / "css/styles.css").read_text(encoding="utf-8")
         movil = css.split("@media (max-width: 767px)", 1)[1]
