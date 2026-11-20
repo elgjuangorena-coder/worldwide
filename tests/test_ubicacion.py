@@ -12,7 +12,14 @@ RAIZ = Path(__file__).resolve().parents[1]
 
 
 def texto(relativo):
-    return (RAIZ / relativo).read_text(encoding="utf-8")
+    """El fichero SIN comentarios: una línea comentada no cuenta como código que existe."""
+    fuente = (RAIZ / relativo).read_text(encoding="utf-8")
+    if relativo.endswith(".html"):
+        return re.sub(r"<!--.*?-->", "", fuente, flags=re.S)
+    fuente = re.sub(r"/\*.*?\*/", "", fuente, flags=re.S)
+    if relativo.endswith(".js"):
+        fuente = re.sub(r"(?<![:\\])//[^\n]*", "", fuente)
+    return fuente
 
 
 def cuerpo_de_funcion(fuente, nombre):
