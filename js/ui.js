@@ -296,6 +296,7 @@ export function setupSheet(onChange) {
     if (!isMobile()) return;
     if (e.button !== undefined && e.button !== 0) return;
     tracking = true;
+    suppressClick = false;
     mode = 'tap';
     pointerId = e.pointerId;
     startY = e.clientY;
